@@ -1,0 +1,38 @@
+{
+  "name": "Snooze",
+   "author": {
+    "name": "Omni Wise",
+    "email": "support@omniwise.app",
+	"url": "https://www.support.omniwise.app/hc/en-us"
+  },
+  "defaultLocale": "en",
+  "private": false,
+  "singleInstall": true,
+  "location": {
+    "support": {
+	  "ticket_sidebar": "assets/sidebar.html",
+	  	  "nav_bar":   "assets/navBar.html",
+		  "background":"assets/back.html"   
+  }},
+    
+
+  
+     "parameters": [
+	 
+    {
+      "name": "statusId",
+      "type": "number",
+	  "required": true
+	
+
+    }
+	
+  ],
+   "version": "1.0",
+  "frameworkVersion": "2.0",
+  "termsConditionsURL": "https://omniwise.app/terms-of-use.html"
+
+
+
+
+}

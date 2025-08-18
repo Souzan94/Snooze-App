@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+	  <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/@zendeskgarden/css-bedrock@7.0.21,npm/@zendeskgarden/css-utilities@4.3.0">
+     <link href="//cdn.jsdelivr.net/combine/npm/@zendeskgarden/css-bedrock,npm/@zendeskgarden/css-grid,npm/@zendeskgarden/css-buttons,npm/@zendeskgarden/css-forms,npm/@zendeskgarden/css-utilities" rel="stylesheet">
+      <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 20px auto;
+            padding: 5px;
+            background-color: #e9ebed;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            position: relative; /* Added position relative */
+        }
+
+        .timer-container {
+            margin-top: 20px;
+            position: relative;
+            height: 15px;
+            background-color: #c2c8cc;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height:100%;
+            background-color: #058541;
+            border-radius: 20px;
+            width: 0%;
+			 color: black;
+			text-align: center;
+           line-height: 20px;
+        }
+
+        .timer-hint {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #68737d;
+        }
+
+        .status {
+            position: absolute;
+            top: 70px; /* Adjusted position */
+            left: 50%; /* Centered horizontally */
+            transform: translateX(-50%);
+            font-size: 14px;
+            color: #68737d; /* Changed color */
+            font-weight: bold;
+        }
+
+        .dropdown {
+            display: none;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 100px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .dropdown-content a {
+            color: #49545c;
+            font-size: 15px;
+            padding: 10px 10px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #edf7ff;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .three-dots::after {
+            content: '\22EE';
+            font-size: 18px;
+            color: #68737d;
+        }
+
+        @media screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .timer-hint {
+                font-size: 12px;
+            }
+            .progress-bar,
+            .timer-hint {
+                width: 100%;
+            }
+        }
+		 .choose-duration {
+            margin: 20px 0;
+            font-size: 14px;
+            color: #49545c;
+            font-weight: bold;
+        }
+		.hint
+		{margin-top: 5px;
+            font-size: 12px;
+            color: #68737d;}
+			
+			#countdownTimer {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+#defaultDurations ,#unitSelect{
+
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #49545c;
+    appearance: none;
+
+}	
+input[type="number"] {
+width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s;	}
+    </style>
+</head>
+
+<body>
+
+<div  id ="siderbarContent" style="display: none;" >
+
+  <div class="activation-container" id ="activationDiv"  style="display: none;" >
+    <p class="activation-text">
+      Before this Feature can be used, it must be activated by authorizing the server-side API.
+    </p>
+    <button class="c-btn c-btn--sm c-btn--primary" id="activate">Activate</button>
+  </div>
+  
+<div class="u-m u-fg-grey-800" id = "mainDiv" style="display: none;">
+
+        <div class="u-cf u-mb choose-duration"> 
+            Choose a duration
+        </div>
+      <div class="u-cf u-mb">
+
+   <select class="c-txt__input c-txt__input--select" id="defaultDurations">
+    <option value="" disabled selected>Choose a duration</option>
+    <option value="5m">5m</option>
+    <option value="10m">10m</option>
+    <option value="30m">30m</option>
+    <option value="1h">1h</option>
+    <option value="2h">2h</option>
+	<option value="12h">12h</option>
+	<option value="24h">24h</option>
+    <option value="new">Create new duration</option>
+</select>
+
+    </div>
+	    <div class="u-cf u-mb">
+              <button class="c-btn c-btn--sm c-btn--primary" id="createBtn2" >Start</button>
+	    </div>
+
+	  </div>
+	    </div>
+<div class="u-m u-fg-grey-800" id="newDurationContainer" style="display: none;">
+    <div class="u-mb">
+
+ <input type="number" class="c-txt__input" id="timeInput" placeholder="Enter a time inetrval">
+  <div class="hint" id="hint">Enter a value between 25 and 604800</div>
+
+        </div>
+            <div class="u-cf u-mb">
+
+ <select class="c-txt__input c-txt__input--select" id="unitSelect">
+  
+        <option value="seconds">Seconds</option>
+        <option value="minutes">Minutes</option>
+        <option value="hours">Hours</option>
+  </select>
+  </div>
+  <button class="c-btn c-btn--sm c-btn--primary" id="createBtn">Start</button>
+          </div>
+    <div class="container" id="container">
+        <div class="timer-container">
+            <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
+        </div>
+        <div class="timer-hint" id="timerHint"></div>
+		    <div class="status" id="status"></div> <!-- Changed location and added status class -->
+			    <div id="countdownTimer"></div>
+
+        <div class="dropdown" id="dropdownContainer">
+            <div class="three-dots"  id ="oplist" style="display: none;"></div>
+            <div class="dropdown-content">
+                 <a id="stopOption" href="#" style="display: block;">stop</a>
+			  <a id="restartOption" href="#" style="display: none;">restart</a>
+
+                 <a id="deleteOption" href="#" style="display: block;">delete</a>
+            </div>
+        </div>
+
+    </div>
+	    <div id="countdownTimer"></div>
+
+    <script src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"></script>
+    <script type="text/javascript" src="sideBar.js"></script>
+</body>
+
+
+</html>
